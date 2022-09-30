@@ -1,0 +1,39 @@
+{% extends 'shopping/base.html' %}
+{% load static %}
+{% block content %} 
+    <div class="container">
+        <div class="row" style="margin-top: 100px;">
+            <div class="col-lg-6">
+                <div class="left-content">
+                    <div class="thumb">
+                        <div class="inner-content">
+                            <h1> Seller Registration Form</h1>
+                            <form action="" method="post" novalidate>
+                                {% csrf_token %}
+
+                                {% for fm in form%}
+                                {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br>
+                                {% endfor%}                                            
+                               
+                                <input type="submit" value="SignUp"> <br> <br>
+                                <a href="{% url 'login'%}" class="btn btn success">Login</a>
+
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {{message}}
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% if forms.non_field_errors %}
+                                    {% for error in forms.non_field_errors%}
+                                        {{error}}
+                                    {% endfor %}
+                                {% endif %}
+                            </form>  
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+{% endblock content %}

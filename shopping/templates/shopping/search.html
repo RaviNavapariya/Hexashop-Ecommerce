@@ -1,0 +1,46 @@
+{% extends 'shopping/base.html' %}
+{% load static %}
+{% block content %}
+    <h3>Search result for {{request.GET.q}}</h3>
+    
+
+    <!-- ***** Men Area Starts ***** -->
+    <section class="section" id="men">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="section-heading">
+                        <h2>Men's Latest</h2>
+                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container d-flex flex-column">
+            <div class="row">
+                {% for x in page_obj %}
+                <div class="col-sm-4">
+                    <img src="{{x.image.url}}" alt="" class="img1">
+                    <div class="small-container d-flex justify-content-between">
+                        <p>{{x.name}}</p>                        
+                        <ul class="stars d-flex">
+                            <li><a href="single-product.html"><i class="fa fa-star star1"></i></a></li>
+                            
+                            <li><form action="/addtocart/" method="get">
+                                {% csrf_token %}                                
+                                  <input type="hidden" name="product_id" value="{{x.id}}">
+                                  <button type="submit" class="btn btn-primary shadow px-3 py-1">Add to cart</button>
+                              </form></li>
+                        </ul>
+                    </div>
+                    <p class="price">${{x.price}}</p>
+                </div>
+                {% endfor %}
+            </div>            
+           
+        </div>
+    </section>
+    <!-- ***** Men Area Ends ***** -->
+
+    
+{% endblock content %}

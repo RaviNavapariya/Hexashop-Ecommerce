@@ -1,0 +1,47 @@
+{% extends 'shopping/base.html' %}
+{% load static %}
+{% block content %} 
+    <div class="container">
+        <div class="row" style="margin-top: 100px;">
+            <div class="col-lg-6">
+                <div class="left-content">
+                    <div class="thumb">
+                        <div class="inner-content">
+                            <h1>{{name}}</h1>
+
+
+                            {% comment %} {% if users != None %}
+                                {% for user in users %}
+                                    <a href="{% url 'userdetail' user.id %}">{{user.username}}</a> <br> <br>
+                                {% endfor%}
+                            {% endif %}    {% endcomment %}
+
+                            {% if messages%}
+                            {% for message in messages %}
+                            <p {% if message.tags %} class="{{message.tags}}" {% endif %}>{{message}}</p>
+                            {% endfor %}
+                            {% endif %}   
+                            
+                            <form action="" method="post" novalidate>
+                                {% if form.non_field_errors %}
+                                    {% for error in form.non_field_errors %}
+                                        <p>{{error}}</p>
+                                    {% endfor %}
+                                {% endif %}
+                                {% for fm in form %}
+                                    {{fm.label_tag}} {{fm}} {{fm.errors}} <br> <br>
+                                {% endfor %}
+                                {% csrf_token %}        
+                                <input type="submit" value="Save"><br> <br>
+                            
+                            <a href="{% url 'logout' %}">Log-Out</a> <br> <br>
+                            <a href="{% url 'changepass'%}">Change Password</a> <br> <br>
+                                                       
+                            </form>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+{% endblock content %}

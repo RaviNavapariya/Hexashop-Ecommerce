@@ -1,0 +1,108 @@
+{% extends 'shopping/base.html' %}
+{% load static %}
+{% block content %} 
+    <div class="container">
+        <div class="" style="margin-top: 100px;">
+            <h1><b>Your Cart</b> </h1>
+            <br>
+            {% for i in carts %}
+            <div class="col-lg-6">                
+                <img src="{{i.product.image.url}}" alt="" class="img1">
+                <div class="d-flex align-items-center justify-content-between" style="width:350px">
+                    <div class="small-container d-flex flex-column justify-content-between">                     
+                        <div>
+                            <b>Product Name : {{i.product.name}}</b>
+                        </div>
+                        <div>
+                            <b>Product Price : {{i.product.price}}</b>
+                        </div>                         
+                        <div>
+                            <label for="quantity"><b>Quantity </b></label>
+                            <a href="" class="minus-cart btn" pid="{{i.product.id}}"><i class="fas minus-square btn-warning fa-lg"><b>-</b></i></a>
+                            <span id="total_item"><b>{{i.item_quantity}}</b></span>
+                            <a href="" class="plus-cart btn" pid="{{i.product.id}}"><i class="fas plus-square btn-warning fa-lg"><b>+</b></i></a>
+                        </div>                          
+                    </div>
+                    <form action="/removetocart/" method="get">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{i.id}}">
+                        <button type="submit" class="btn btn-primary shadow px-3 py-1" >Remove cart</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            {% endfor %}          
+            <div class="col-sm-4" style="position: absolute; top: 200px; right: 100px;">
+                <div class="form-group">
+                  <label for="email">Email: </label>
+                  <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+                  <small>Please enter your email address</small>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h3>The Total Amount of</h3>
+                        <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                            Amount <span>Rs. <span id="amount">{{amount}} </span> </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between a lign-items-center px-0">
+                            Shipping<span>Rs.
+                            70.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                            <div>
+                            <strong>Total</strong> <small>(Including  All Tax)</small>
+                            </div>
+                            <span><strong>Rs. <strong id="totalamount">{{totalamount}}</strong></strong></span>
+                        </li>
+                        </ul>            
+                        <div class="card-footer d-flex">
+                        <button class="btn btn-success ml-auto" href="{% url 'api_checkout_session' "totalamount" %}" id="checkout-button">Checkout</button>
+                        </div>                    
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript"> 
+    // Create an instance of the Stripe object with your publishable API key
+    console.log("clicked fcbgdfvcb")
+    var stripe = Stripe('{{ stripe_publishable_key }}');
+    console.log("------------------>",stripe)
+    var checkoutButton = document.getElementById('checkout-button');
+    checkoutButton.addEventListener('click', function () {
+        
+        // Create a new Checkout Session using the server-side endpoint you
+        // created in step 3.
+        fetch("{% url 'api_checkout_session' id="totalamount" %}", {
+            method: 'POST',
+            body: JSON.stringify(
+                { email : "abc@gmail.com"}
+
+                
+            )
+        })
+            .then(function (response) {
+               console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>",response)
+               return response.json();
+            })
+            .then(function (session) {
+                return stripe.redirectToCheckout({ sessionId: session.sessionId });
+            })
+            .then(function (result) {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, you should display the localized error message to your
+                // customer using `error.message`.
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function (error) {
+                console.error('Error:', error)
+            });
+    });
+</script>
+
+{% endblock content %}
+

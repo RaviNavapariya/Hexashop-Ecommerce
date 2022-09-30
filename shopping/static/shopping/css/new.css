@@ -1,0 +1,22 @@
+.slider-part{
+    border: 1px solid #000;
+    height: 200px;
+    width: 100%;
+}
+
+.img1{
+    height: 368px;
+    width: 350px;
+    border: 1px solid #000;
+}
+
+.small-container{
+    padding-top: 30px;
+    width: 350px;
+}
+
+.star1{
+    font-size: 25px;
+    color: rgb(97, 180, 97);
+}
+
